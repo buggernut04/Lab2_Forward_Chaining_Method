@@ -14,6 +14,7 @@ def load_facts(file_path: str):
         data = json.load(file)
     return data
 
+# display existing facts in the database
 def display_facts(existing_facts: dict):
 
     print("\nFacts from the database:")
@@ -35,7 +36,7 @@ def is_existing_fact(str_fact: str, facts: dict) -> bool:
     
     return False
     
-    
+# helper function to check if certain rule is in correct format  
 def is_rule_correct_format(rule):
     # Define a regular expression pattern for a valid rule
     pattern = r'If (.+?)(?: and (.+?))*? then (.+)'
@@ -48,7 +49,7 @@ def is_rule_correct_format(rule):
     else:
         return False
 
-# helper function to validate rule
+# function to validate rule input and will return then statement
 def validate_rule(rule: str) -> str:
     # load existing facts in the database
     existing_facts: dict = load_facts('db.json')
@@ -78,7 +79,7 @@ def validate_rule(rule: str) -> str:
     
     return ""
 
-# generate the partial facts to the facts in the database
+# generate facts in the database
 def generate_fact(latest_key: str, value: str, existing_facts: dict):
     if not existing_facts:
         existing_facts.update({"A": value})
@@ -135,7 +136,6 @@ if __name__ == '__main__':
     # holder of all inputted rules
     rules = []
 
-
     while True:
         # load existing facts in the database
         existing_facts: dict = load_facts('db.json')
@@ -150,9 +150,11 @@ if __name__ == '__main__':
 
         print("\nChoose below of what process you want me to do:\n[a] Input Facts\n[b] Input Rules \n[c] Generate \n[q] Exit")
 
+        # input portion to select option
         key_name = keyboard.read_event(suppress=True)
         response = key_name.name
 
+        # input fact
         if response.lower() == 'a':
             str_fact = input("\nProvide me a fact: ")
             latest_key = ""
@@ -168,7 +170,7 @@ if __name__ == '__main__':
                 else: generate_fact(latest_key, str_fact, existing_facts)
 
             time.sleep(0.2)
-
+        # input rule
         elif response.lower() == 'b':
             
             str_rule = input("\nProvide me a rule [Format: If (statement 1) then (statement 2).] or [Format: If (statement 1) and (statement 2) and ... then (statement n).]: ")
@@ -179,7 +181,7 @@ if __name__ == '__main__':
                 print("\nPlease follow the format I have provided!\n")
 
             time.sleep(0.2)
-
+        #generate fact from the inputted rule
         elif response.lower() == 'c':
             if not rules:
                 print("\nNothing to generate.\n")
