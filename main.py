@@ -49,6 +49,36 @@ def is_rule_correct_format(rule):
     else:
         return False
 
+# generate facts in the database
+def generate_fact(latest_key: str, value: str, existing_facts: dict):
+    existing_facts.update({generate_key(latest_key): value})
+    # save fact base on rules
+    save_facts('db.json', existing_facts)
+
+# generate key to be putted in the database
+def generate_key(latest_key: str) -> str:
+    # Convert the string to a list of characters
+    chars = list(latest_key)
+
+    # Start from the rightmost character
+    i = len(chars) - 1
+
+    while i >= 0:
+        if chars[i] == 'Z':
+            chars[i] = 'A'
+            i -= 1
+        else:
+            chars[i] = chr(ord(chars[i]) + 1)
+            break
+
+    # If we reach the leftmost character and it's 'A', insert 'A' at the beginning
+    if i == -1 and chars[0] == 'A':
+        chars.insert(0, 'A')
+
+    # Convert the list of characters back to a string
+    result = ''.join(chars)
+    return result
+
 # function to validate rule input and will return then statement
 def validate_rule(rule: str) -> str:
     # load existing facts in the database
@@ -78,17 +108,7 @@ def validate_rule(rule: str) -> str:
         return match_pattern.group(3)
     
     return ""
-
-# generate facts in the database
-def generate_fact(latest_key: str, value: str, existing_facts: dict):
-    if not existing_facts:
-        existing_facts.update({"A": value})
-    else: 
-        existing_facts.update({generate_key(latest_key): value})
-
-    # save fact base on rules
-    save_facts('db.json', existing_facts)
-
+    
 # check if the statement generate a true implication
 def check_statement(rule_data: list, existing_facts: dict):
     
@@ -106,30 +126,6 @@ def check_statement(rule_data: list, existing_facts: dict):
     if ctr == len(rule_data):
         return True
     else: return False
-
-# generate key to be putted in the database
-def generate_key(latest_key: str) -> str:
-    # Convert the string to a list of characters
-    chars = list(latest_key)
-
-    # Start from the rightmost character
-    i = len(chars) - 1
-
-    while i >= 0:
-        if chars[i] == 'Z':
-            chars[i] = 'A'
-            i -= 1
-        else:
-            chars[i] = chr(ord(chars[i]) + 1)
-            break
-
-    # If we reach the leftmost character and it's 'A', insert 'A' at the beginning
-    if i == -1 and chars[0] == 'A':
-        chars.insert(0, 'A')
-
-    # Convert the list of characters back to a string
-    result = ''.join(chars)
-    return result
 
 if __name__ == '__main__':
 
@@ -212,7 +208,7 @@ if __name__ == '__main__':
 
             rules.clear()
             time.sleep(0.2)
-
+        # exit
         elif response.lower() == 'q':
             print("\nThank you for your time. Your the best!\n")
             break
