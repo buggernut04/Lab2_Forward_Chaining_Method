@@ -2,7 +2,7 @@
 
 Welcome to the Rule-Based Expert System program! This Python application implements a forward chaining reasoning method to process facts and rules and generate new facts based on the provided rules.
 
-# Introduction
+## Introduction
 The project consists of two main modules:
 
 1. **main.py**:
@@ -11,7 +11,7 @@ The project consists of two main modules:
 2. **exprt_func.py**:
    This module includes functions related to the generation and validation of facts, loading and saving facts from/to a JSON file, and other helper functions.
 
-# How to Use
+## How to Use
 
 1. **Run the Program**: Execute `main.py` to start the program. Follow the on-screen instructions to input facts and rules, display existing facts, and generate new facts.
 
